@@ -3,6 +3,7 @@ version: "2.1"
 volumes:
   html:
   mysql:
+  tailscale:
 
 services:
   # https://hub.docker.com/_/nextcloud/
@@ -65,3 +66,20 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: nextcloud
+
+
+   # https://github.com/klutchell/balena-tailscale
+  tailscale:
+    build: tailscale
+    restart: on-failure
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    labels:
+      io.balena.features.kernel-modules: 1
+    tmpfs:
+      - /tmp
+      - /var/run/
+    volumes:
+      - tailscale:/var/lib/tailscale
