@@ -62,6 +62,7 @@ services:
   hostname:
     image: balenablocks/hostname@sha256:b923d6ea886ec48125d2c49e431638d2ef6f4adac574b729b4135cfade3ffdce
     restart: no
+    command: ["sh", "-c", "sleep 60 && sleep infinity"]
     labels:
       io.balena.features.supervisor-api: 1
     environment:
