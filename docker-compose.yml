@@ -19,7 +19,7 @@ services:
       MYSQL_PASSWORD: nextcloud
       REDIS_HOST: redis
       REDIS_HOST_PASSWORD: nextcloud
-      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com"
+      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com 100.0.0.0/8"
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_LIMIT: 2G
     depends_on:
@@ -57,16 +57,6 @@ services:
   redis:
     image: redis:8.10.0-alpine@sha256:978f0e01593e65eed801f2402944efcd936d43b5027e4908a7897baf88ed6241
     command: redis-server --requirepass nextcloud
-
-  # https://github.com/balenablocks/hostname
-  hostname:
-    image: balenablocks/hostname@sha256:b923d6ea886ec48125d2c49e431638d2ef6f4adac574b729b4135cfade3ffdce
-    restart: no
-    labels:
-      io.balena.features.supervisor-api: 1
-    environment:
-      SET_HOSTNAME: nextcloud
-
 
    # https://github.com/klutchell/balena-tailscale
   tailscale:
