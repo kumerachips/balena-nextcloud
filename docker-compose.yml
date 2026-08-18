@@ -19,7 +19,7 @@ services:
       MYSQL_PASSWORD: nextcloud
       REDIS_HOST: redis
       REDIS_HOST_PASSWORD: nextcloud
-      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com"
+      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com 100.* 192.168.*"
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_LIMIT: 2G
     depends_on:
