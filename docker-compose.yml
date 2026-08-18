@@ -27,14 +27,14 @@ services:
       - redis
 
   # https://hub.docker.com/_/nginx/
-  nginx:
-    build: nginx
-    ports:
-      - 80:80/tcp
-    volumes:
-      - html:/var/www/html:ro
-    depends_on:
-      - nextcloud
+  # nginx:
+  #   build: nginx
+  #   ports:
+  #     - 80:80/tcp
+  #   volumes:
+  #     - html:/var/www/html:ro
+  #   depends_on:
+  #     - nextcloud
 
   # https://hub.docker.com/r/yobasystems/alpine-mariadb
   mariadb:
