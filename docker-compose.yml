@@ -69,6 +69,8 @@ services:
       - NET_RAW
     devices:
       - /dev/net/tun:/dev/net/tun
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
     labels:
       io.balena.features.kernel-modules: 1
     tmpfs:
