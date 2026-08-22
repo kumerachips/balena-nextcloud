@@ -22,6 +22,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com 100.*.*.* 192.168.1.* *.tail7791f7.ts.net"
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_LIMIT: 2G
+      UDEV: on
     depends_on:
       - mariadb
       - redis
