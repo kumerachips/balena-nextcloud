@@ -66,6 +66,9 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
     labels:
       io.balena.features.kernel-modules: 1
     tmpfs:
