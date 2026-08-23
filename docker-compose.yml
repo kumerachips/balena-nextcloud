@@ -1,67 +1,79 @@
 version: "2.1"
 
 volumes:
-  html:
-  mysql:
+  #html:
+  #mysql:
   tailscale:
   media:
 
 services:
   # https://hub.docker.com/_/nextcloud/
-  nextcloud:
-    build: nextcloud
-    privileged: true
-    devices:
-      - /dev:/dev    
-    volumes:
-      - html:/var/www/html
-      - media:/media
-    environment:
-      MYSQL_HOST: mariadb
-      MYSQL_DATABASE: nextcloud
-      MYSQL_USER: nextcloud
-      MYSQL_PASSWORD: nextcloud
-      REDIS_HOST: redis
-      REDIS_HOST_PASSWORD: nextcloud
-      NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com 100.*.*.* 192.168.1.* *.tail7791f7.ts.net"
-      PHP_MEMORY_LIMIT: 512M
-      PHP_UPLOAD_LIMIT: 2G
-      UDEV: on
-    depends_on:
-      - mariadb
-      - redis
+  # nextcloud:
+  #   build: nextcloud
+  #   privileged: true
+  #   devices:
+  #     - /dev:/dev    
+  #   volumes:
+  #     - html:/var/www/html
+  #     - media:/media
+  #   environment:
+  #     MYSQL_HOST: mariadb
+  #     MYSQL_DATABASE: nextcloud
+  #     MYSQL_USER: nextcloud
+  #     MYSQL_PASSWORD: nextcloud
+  #     REDIS_HOST: redis
+  #     REDIS_HOST_PASSWORD: nextcloud
+  #     NEXTCLOUD_TRUSTED_DOMAINS: "nextcloud.local *.balena-devices.com 100.*.*.* 192.168.1.* *.tail7791f7.ts.net"
+  #     PHP_MEMORY_LIMIT: 512M
+  #     PHP_UPLOAD_LIMIT: 2G
+  #     UDEV: on
+  #   depends_on:
+  #     - mariadb
+  #     - redis
 
   # https://hub.docker.com/_/nginx/
-  nginx:
-    build: nginx
-    ports:
-      - 80:80/tcp
-    volumes:
-      - html:/var/www/html:ro
-    depends_on:
-      - nextcloud
+  # nginx:
+  #   build: nginx
+  #   ports:
+  #     - 80:80/tcp
+  #   volumes:
+  #     - html:/var/www/html:ro
+  #   depends_on:
+  #     - nextcloud
 
-  # https://hub.docker.com/r/yobasystems/alpine-mariadb
-  mariadb:
-    image: yobasystems/alpine-mariadb:11.4.9@sha256:8f13179e0a3b40b0176289d5666322e450b0189dc3748ad34949c479218ce701
-    volumes:
-      - mysql:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: nextcloud
-      MYSQL_USER: nextcloud
-      MYSQL_PASSWORD: nextcloud
-      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
-    command:
-      - --transaction-isolation=READ-COMMITTED
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-      - --binlog-format=ROW
-      - --innodb-file-per-table=1
+  # # https://hub.docker.com/r/yobasystems/alpine-mariadb
+  # mariadb:
+  #   image: yobasystems/alpine-mariadb:11.4.9@sha256:8f13179e0a3b40b0176289d5666322e450b0189dc3748ad34949c479218ce701
+  #   volumes:
+  #     - mysql:/var/lib/mysql
+  #   environment:
+  #     MYSQL_DATABASE: nextcloud
+  #     MYSQL_USER: nextcloud
+  #     MYSQL_PASSWORD: nextcloud
+  #     MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+  #   command:
+  #     - --transaction-isolation=READ-COMMITTED
+  #     - --character-set-server=utf8mb4
+  #     - --collation-server=utf8mb4_unicode_ci
+  #     - --binlog-format=ROW
+  #     - --innodb-file-per-table=1
 
-  # https://hub.docker.com/_/redis
-  redis:
-    image: redis:8.10.0-alpine@sha256:978f0e01593e65eed801f2402944efcd936d43b5027e4908a7897baf88ed6241
-    command: redis-server --requirepass nextcloud
+  # # https://hub.docker.com/_/redis
+  # redis:
+  #   image: redis:8.10.0-alpine@sha256:978f0e01593e65eed801f2402944efcd936d43b5027e4908a7897baf88ed6241
+  #   command: redis-server --requirepass nextcloud
+
+  samba:
+      build: samba
+      restart: on-failure
+      privileged: true
+      network_mode: host
+      labels:
+        io.balena.features.dbus: '1'
+      volumes:
+        - 'media:/media'
+      environment:
+        - UDEV=1
 
    # https://github.com/klutchell/balena-tailscale
   tailscale:
