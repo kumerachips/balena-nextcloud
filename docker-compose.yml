@@ -11,6 +11,8 @@ services:
   nextcloud:
     build: nextcloud
     privileged: true
+    devices:
+      - /dev:/dev    
     volumes:
       - html:/var/www/html
       - media:/media
@@ -25,8 +27,6 @@ services:
       PHP_MEMORY_LIMIT: 512M
       PHP_UPLOAD_LIMIT: 2G
       UDEV: on
-    devices:
-      - /dev:/dev
     depends_on:
       - mariadb
       - redis

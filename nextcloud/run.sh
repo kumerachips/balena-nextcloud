@@ -17,9 +17,14 @@ for uuid in $(blkid -sUUID -ovalue -t LABEL=NEXTCLOUD)
 do
     {
         mkdir -pv /media/"${uuid}"
-        mount -v UUID="${uuid}" /media/"${uuid}"
+        
+        # Try mounting with explicit www-data (uid 33, gid 33) ownership for FAT/NTFS/exFAT
+        mount -v -o uid=33,gid=33,umask=002 UUID="${uuid}" /media/"${uuid}" \
+        || mount -v UUID="${uuid}" /media/"${uuid}" # Fallback for ext4
+        
+        # Ensure ownership for Linux-native filesystems (ext4)
         chown -R www-data:www-data /media/"${uuid}"
-        chmod -R 770 /media/"${uuid}"
+        chmod -R 775 /media/"${uuid}"
     } || continue
 done
 
