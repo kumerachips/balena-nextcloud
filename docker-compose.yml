@@ -6,15 +6,18 @@ volumes:
 
 services:
   samba:
-    build: ./samba
+    build: samba
     container_name: samba
     restart: always
     network_mode: host
     privileged: true
+    devices:
+      - /dev/sda1:/dev/sda1
+      - /dev/net/tun:/dev/net/tun
     labels:
         io.balena.features.dbus: '1'
     volumes:
-      - 'storage-data:/media/usbdisk'
+      - 'storage-data:/sda1'
     environment:
         - UDEV=1
   tailscale:
