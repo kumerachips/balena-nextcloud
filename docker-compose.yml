@@ -17,7 +17,7 @@ services:
     labels:
         io.balena.features.dbus: '1'
     volumes:
-      - 'storage-data:/sda1'
+      - storage-data:/dev/sda1
     environment:
         - UDEV=1
   tailscale:
@@ -31,8 +31,8 @@ services:
     labels:
       - io.balena.features.kernel-modules=1
     volumes:
-      - 'ts-state:/var/lib/tailscale'
-      - '/dev/net/tun:/dev/net/tun'
+      - ts-state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
     tmpfs:
       - /tmp
       - /var/run/
