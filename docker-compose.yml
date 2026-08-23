@@ -13,7 +13,6 @@ services:
     privileged: true
     devices:
       - /dev/sda1:/dev/sda1
-      - /dev/net/tun:/dev/net/tun
     labels:
         io.balena.features.dbus: '1'
     volumes:
@@ -32,7 +31,6 @@ services:
       - io.balena.features.kernel-modules=1
     volumes:
       - ts-state:/var/lib/tailscale
-      - /dev/net/tun:/dev/net/tun
     tmpfs:
       - /tmp
       - /var/run/
