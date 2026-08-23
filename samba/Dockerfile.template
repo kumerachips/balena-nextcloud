@@ -30,8 +30,5 @@ ENV SAMBA_ROOT=/samba
 
 EXPOSE 139 445
 
-<<<<<<< HEAD
 CMD ["bash", "scripts/start.sh", "--foreground", "--no-process-group"]
-=======
-CMD ["bash", "scripts/start.sh", "--foreground", "-S", "--no-process-group"]
->>>>>>> fa4ef2c2db2ec3508beb5099c8b5b40646fb4d61
+
