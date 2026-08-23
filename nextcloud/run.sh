@@ -18,8 +18,8 @@ do
     {
         mkdir -pv /media/"${uuid}"
         
-        # Try mounting with explicit www-data (uid 33, gid 33) ownership for FAT/NTFS/exFAT
-        mount -v -o uid=33,gid=33,umask=002 UUID="${uuid}" /media/"${uuid}" \
+        # Try mounting with explicit www-data (uid 82, gid 82) ownership for FAT/NTFS/exFAT
+        mount -v -o uid=82,gid=82,umask=002 UUID="${uuid}" /media/"${uuid}" \
         || mount -v UUID="${uuid}" /media/"${uuid}" # Fallback for ext4
         
         # Ensure ownership for Linux-native filesystems (ext4)
