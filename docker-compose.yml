@@ -4,6 +4,7 @@ volumes:
   html:
   mysql:
   tailscale:
+  media:
 
 services:
   # https://hub.docker.com/_/nextcloud/
@@ -12,6 +13,7 @@ services:
     privileged: true
     volumes:
       - html:/var/www/html
+      - media:/media
     environment:
       MYSQL_HOST: mariadb
       MYSQL_DATABASE: nextcloud
