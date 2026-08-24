@@ -2,7 +2,7 @@ version: '2.1'
 
 volumes:
   storage-data:
-  ts-state:
+  tailscale:
 
 services:
   samba:
@@ -20,21 +20,21 @@ services:
     environment:
         - UDEV=1
   tailscale:
-    image: tailscale/tailscale:latest
-    container_name: tailscale
+    build: tailscale
+    restart: on-failure
     network_mode: host
     cap_add:
       - NET_ADMIN
-      - NET_RAW
       - SYS_MODULE
+      - NET_RAW
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - TS_STATE_DIR=/var/lib/tailscale
     labels:
-      - io.balena.features.kernel-modules=1
-    volumes:
-      - ts-state:/var/lib/tailscale
+      io.balena.features.kernel-modules: 1
     tmpfs:
       - /tmp
       - /var/run/
-    environment:
-      - TS_STATE_DIR=/var/lib/tailscale
-      - TS_EXTRA_ARGS=--accept-dns=true
-    restart: always
+    volumes:
+      - tailscale:/var/lib/tailscale
