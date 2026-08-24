@@ -14,11 +14,12 @@ services:
     devices:
       - /dev/sda1:/dev/sda1
     labels:
-        io.balena.features.dbus: '1'
+      io.balena.features.dbus: '1'
     volumes:
       - storage-data:/dev/sda1
     environment:
-        - UDEV=1
+      - UDEV=1
+
   tailscale:
     build: tailscale
     restart: on-failure
@@ -31,10 +32,12 @@ services:
       - /dev/net/tun:/dev/net/tun
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
+      - TS_AUTHKEY=${TS_AUTHKEY}
+      - TS_EXTRA_ARGS=--accept-dns=false
     labels:
       io.balena.features.kernel-modules: 1
     tmpfs:
       - /tmp
-      - /var/run/
+      - /run
     volumes:
       - tailscale:/var/lib/tailscale

@@ -8,5 +8,5 @@ FROM bh.cr/gh_klutchell/tailscale-aarch64/26d28a6ac72667b46154e07730908a04:1.102
 # hadolint ignore=DL3006
 FROM balena-tailscale-${BALENA_ARCH}
 
-ENV TS_HOSTNAME="nextcloud"
+ENV TS_HOSTNAME="tailscale"
 ENV TS_EXTRA_ARGS="--reset"
