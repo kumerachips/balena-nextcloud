@@ -15,11 +15,11 @@ services:
       - "445:445"
     devices:
       - /dev/sda1:/dev/sda1
+      - /sys:/sys
     labels:
       io.balena.features.dbus: '1'
     volumes:
       - storage-data:/dev/sda1
-      - /sys:/sys
     environment:
       - UDEV=1
 
