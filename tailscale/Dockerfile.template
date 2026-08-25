@@ -8,5 +8,9 @@ FROM bh.cr/gh_klutchell/tailscale-aarch64/26d28a6ac72667b46154e07730908a04:1.102
 # hadolint ignore=DL3006
 FROM balena-tailscale-${BALENA_ARCH}
 
+<<<<<<< HEAD
 ENV TS_HOSTNAME="blacky"
+=======
+ENV TS_HOSTNAME="tailscale"
+>>>>>>> e6f956986f6bc4a7a4bab230e6a61aa31d50cc99
 ENV TS_EXTRA_ARGS="--reset"
