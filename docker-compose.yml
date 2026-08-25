@@ -34,16 +34,11 @@ services:
     environment:
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_AUTHKEY=${TS_AUTHKEY}
-<<<<<<< HEAD
       - TS_USERSPACE=false
-    tmpfs:
-=======
-      - TS_EXTRA_ARGS=--accept-dns=false
     labels:
       io.balena.features.kernel-modules: 1
     tmpfs:
       - /tmp
->>>>>>> e6f956986f6bc4a7a4bab230e6a61aa31d50cc99
       - /run
     volumes:
       - tailscale:/var/lib/tailscale
