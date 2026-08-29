@@ -1,9 +1,5 @@
 version: '2.1'
 
-volumes:
-  storage-data:
-  tailscale:
-
 services:
   samba:
     build: samba
@@ -23,6 +19,82 @@ services:
     environment:
       - UDEV=1
 
+# https://hub.docker.com/r/homeassistant/home-assistant
+  homeassistant:
+    image: homeassistant/home-assistant:2026.8.2@sha256:56690a89c79a0de98035e1719f8324a92d5859c1192ff45adb0230ea81cb42a5
+    network_mode: host
+    volumes:
+      - config:/config
+    labels:
+      io.balena.features.dbus: "1"
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
+    privileged: true
+
+  # https://hub.docker.com/_/eclipse-mosquitto
+  mqtt:
+    build: mqtt
+    ports:
+      - 1883:1883
+    volumes:
+      - mqtt:/mosquitto/data
+    tmpfs:
+      - /mosquitto/log
+
+  # https://esphome.io/guides/getting_started_command_line.html#installation
+  esphome:
+    image: ghcr.io/esphome/esphome:2026.7.4@sha256:e636269c6390c2124916510d45f55febb1d9ce41365f8445c9083ee41e43c92b
+    volumes:
+      - esphome:/config
+    privileged: true
+    network_mode: host
+
+  # https://www.zigbee2mqtt.io/guide/getting-started/#installation
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt:2.13.0@sha256:4fb4db4d49a217bed6d0204f454ce809febc565bbe051b85c556ee2bcef73d8c
+    volumes:
+      - zigbee2mqtt:/app/data
+    ports:
+      - 7000:8080
+    privileged: true
+
+  # https://github.com/balenablocks/hostname
+  hostname:
+    build: hostname
+    restart: no
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: homeserver
+
+  # https://github.com/home-assistant-libs/python-matter-server/blob/main/docs/docker.md
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
+    # Required for mDNS to work correctly
+    network_mode: host
+    volumes:
+      - matter-server:/data/
+    environment:
+      # Required for Bluetooth via D-Bus
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
+    labels:
+      # Required for Bluetooth via D-Bus
+      io.balena.features.dbus: '1'
+    # If you adjust command line, make sure to pass the default CMD arguments too:
+    #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
+
+  influxdb:
+    image: influxdb:1.8.6
+    volumes:
+      - influxdb:/var/lib/influxdb
+
+  grafana:
+    image: grafana/grafana:8.1.2
+    volumes:
+      - grafana:/var/lib/grafana
+    ports:
+        - 3010:3000/tcp      
+
   tailscale:
     build: tailscale
     restart: always
@@ -41,4 +113,15 @@ services:
       - /tmp
       - /run
     volumes:
-      - tailscale:/var/lib/tailscale
+      - tailscale:/var/lib/tailscale        
+
+volumes:
+  config:
+  mqtt:
+  esphome:
+  zigbee2mqtt:
+  matter-server:
+  influxdb:
+  grafana:
+  tailscale:
+  storage-data:
