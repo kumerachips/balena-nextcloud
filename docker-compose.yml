@@ -1,6 +1,15 @@
-version: '2.1'
+version: "2.1"
 
 services:
+  # https://github.com/balenablocks/hostname
+  hostname:
+    build: hostname
+    restart: no
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: homeserver
+
   samba:
     build: samba
     container_name: samba
@@ -12,17 +21,19 @@ services:
     devices:
       - /dev/sda1:/dev/sda1
     labels:
-      io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     volumes:
       - storage-data:/dev/sda1
       - /sys:/sys
     environment:
       - UDEV=1
 
-# https://hub.docker.com/r/homeassistant/home-assistant
+  # https://hub.docker.com/r/homeassistant/home-assistant
   homeassistant:
     image: homeassistant/home-assistant:2026.8.2@sha256:56690a89c79a0de98035e1719f8324a92d5859c1192ff45adb0230ea81cb42a5
     network_mode: host
+    ports:
+      - "8123:8123"
     volumes:
       - config:/config
     labels:
@@ -44,6 +55,8 @@ services:
   # https://esphome.io/guides/getting_started_command_line.html#installation
   esphome:
     image: ghcr.io/esphome/esphome:2026.7.4@sha256:e636269c6390c2124916510d45f55febb1d9ce41365f8445c9083ee41e43c92b
+    ports:
+      - "6052:6052"
     volumes:
       - esphome:/config
     privileged: true
@@ -58,20 +71,13 @@ services:
       - 7000:8080
     privileged: true
 
-  # https://github.com/balenablocks/hostname
-  hostname:
-    build: hostname
-    restart: no
-    labels:
-      io.balena.features.supervisor-api: 1
-    environment:
-      SET_HOSTNAME: homeserver
-
   # https://github.com/home-assistant-libs/python-matter-server/blob/main/docs/docker.md
   matter-server:
     image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
     # Required for mDNS to work correctly
     network_mode: host
+    ports:
+      - "5580:5580"
     volumes:
       - matter-server:/data/
     environment:
@@ -79,12 +85,14 @@ services:
       DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
     labels:
       # Required for Bluetooth via D-Bus
-      io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     # If you adjust command line, make sure to pass the default CMD arguments too:
     #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 
   influxdb:
     image: influxdb:1.8.6
+    ports:
+      - "8086:8086"
     volumes:
       - influxdb:/var/lib/influxdb
 
@@ -93,11 +101,14 @@ services:
     volumes:
       - grafana:/var/lib/grafana
     ports:
-        - 3010:3000/tcp      
+      - "3010:3000/tcp"
 
   tailscale:
     build: tailscale
     restart: always
+    ports:
+      - "41641:41641/udp"
+      - "3478:3478/udp"
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -113,7 +124,7 @@ services:
       - /tmp
       - /run
     volumes:
-      - tailscale:/var/lib/tailscale        
+      - tailscale:/var/lib/tailscale      
 
 volumes:
   config:
