@@ -2,13 +2,13 @@ version: "2.1"
 
 services:
   # https://github.com/balenablocks/hostname
-  hostname:
-    build: hostname
-    restart: no
-    labels:
-      io.balena.features.supervisor-api: 1
-    environment:
-      SET_HOSTNAME: blacky
+  # hostname:
+  #   build: hostname
+  #   restart: no
+  #   labels:
+  #     io.balena.features.supervisor-api: 1
+  #   environment:
+  #     SET_HOSTNAME: blacky
 
   samba:
     build: samba
