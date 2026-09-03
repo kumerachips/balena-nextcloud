@@ -15,9 +15,9 @@ services:
     container_name: samba
     restart: always
     privileged: true
-    ports:
-      - "139:139"
-      - "445:445"
+    # ports:
+    #   - "139:139"
+    #   - "445:445"
     devices:
       - /dev/sda1:/dev/sda1
     labels:
@@ -32,8 +32,8 @@ services:
   homeassistant:
     image: homeassistant/home-assistant:2026.8.2@sha256:56690a89c79a0de98035e1719f8324a92d5859c1192ff45adb0230ea81cb42a5
     network_mode: host
-    ports:
-      - "8123:8123"
+    # ports:
+    #   - "8123:8123"
     volumes:
       - config:/config
     labels:
@@ -55,8 +55,8 @@ services:
   # https://esphome.io/guides/getting_started_command_line.html#installation
   esphome:
     image: ghcr.io/esphome/esphome:2026.7.4@sha256:e636269c6390c2124916510d45f55febb1d9ce41365f8445c9083ee41e43c92b
-    ports:
-      - "6052:6052"
+    # ports:
+    #   - "6052:6052"
     volumes:
       - esphome:/config
     privileged: true
@@ -76,8 +76,8 @@ services:
     image: ghcr.io/home-assistant-libs/python-matter-server:8.1.0@sha256:170aa093ce91c76cde4cc390918307590f0f5558fcec93f913af3cb019e6562a
     # Required for mDNS to work correctly
     network_mode: host
-    ports:
-      - "5580:5580"
+    # ports:
+    #   - "5580:5580"
     volumes:
       - matter-server:/data/
     environment:
@@ -91,8 +91,8 @@ services:
 
   influxdb:
     image: influxdb:1.8.6
-    ports:
-      - "8086:8086"
+    # ports:
+    #   - "8086:8086"
     volumes:
       - influxdb:/var/lib/influxdb
 
